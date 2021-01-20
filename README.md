@@ -1,4 +1,3 @@
-# np-final-project
 # Quick start
 - create .env file in /np-final-project, with
 ```sh
