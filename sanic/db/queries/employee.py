@@ -1,6 +1,6 @@
 from api.request import RequestCreateUserDto
 from db.database import DBSession
-from db.exceptions import DBEmployeeExistException, DBEmployeeNotExistExtension
+from db.exceptions import DBEmployeeExistException, DBUserNotExistExtension
 from db.models import DBEmployee
 
 

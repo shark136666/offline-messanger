@@ -9,7 +9,11 @@ class DBDataException(Exception):
 class DBEmployeeExistException(Exception):
     pass
 
-class DBEmployeeNotExistExtension(Exception):
+
+class DBUserNotExistExtension(Exception):
     pass
+
+
+
 
 

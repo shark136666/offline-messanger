@@ -3,6 +3,8 @@ from sanic.response import BaseHTTPResponse, json
 from http import HTTPStatus
 from configs.config import ApplicationConfig
 from context import Context
+from helpers.auth import ReadTokenException, read_token
+from transport.sanic.exceptions import SanicAuthException
 
 
 class SanicEndpoint:
@@ -10,11 +12,18 @@ class SanicEndpoint:
     async def __call__(self, *args, **kwargs) -> BaseHTTPResponse:
         return await self.handler(*args, **kwargs)
 
-    def __init__(self, config: ApplicationConfig,context: Context, uri: str, methods: list, *args, **kwargs ):
+    def __init__(self,
+                 config: ApplicationConfig,
+                 context: Context,
+                 uri: str,
+                 methods: list,
+                 auth_required: bool = False,
+                 *args, **kwargs ):
         self.config = config
         self.uri = uri
         self.methods = methods
         self.context = context
+        self.auth_required=auth_required
         self.__name__ = self.__class__.__name__
 
 
@@ -45,8 +54,22 @@ class SanicEndpoint:
             if header.lower().startswith('x-')
         }
 
+    @staticmethod
+    def import_body_auth(request:Request)-> dict:
+        token = request.headers.get('Authorization')
+        try:
+            return read_token(token)
+        except ReadTokenException as e:
+            raise SanicAuthException(str(e))
+
     async def handler(self, request: Request, *args, **kwargs) -> BaseHTTPResponse :
         body = {}
+
+        if self.auth_required:
+            try:
+                body.update(self.import_body_auth(request))
+            except SanicAuthException as e:
+                return await self.make_response_json(status=e.status_code)
 
         body.update(self.import_body_json(request))
         body.update(self.import_body_headers(request))
@@ -61,7 +84,7 @@ class SanicEndpoint:
         return await self.method_not_imp(method=method)
 
     async def method_not_imp(self, method: str) -> BaseHTTPResponse:
-        return await self.make_response_json(status=500, message=f'Method{method.upper()} not inplemented')
+        return await self.make_response_json(status=500, message=f'Method {method.upper()} not implemented')
 
     async def method_get(self, request: Request, body: dict, *args, **kwargs) -> BaseHTTPResponse:
         return await self.method_not_imp(method='GET')

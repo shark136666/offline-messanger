@@ -4,29 +4,30 @@ from transport.sanic.exceptions import SanicUserNotFound,SanicPasswordHashExcept
 
 from transport.sanic.endpoints import BaseEndpoint
 from api.request import RequestCreateUserDto
-from db.queries import employee as employees_queries
+from db.queries import user as user_queries
 from db.exceptions import DBUserNotExistExtension
 from helpers.password.hash import check_hash,ChekPasswordHashException
 from helpers.auth import create_token
 
-class AuthEmployeeEndpoint(BaseEndpoint):
+
+class AuthUserEndpoint(BaseEndpoint):
     async def method_post(self, request: Request, body: dict,session, *args, **kwargs) -> BaseHTTPResponse:
 
         request_model = RequestCreateUserDto(body)
 
         try:
-            db_employee = employees_queries.get_employee(session,login=request_model.login)
+            db_user = user_queries.get_user(session,login=request_model.login)
         except DBUserNotExistExtension:
-            raise SanicUserNotFound('Employee not found')
+            raise SanicUserNotFound('User not found')
 
         try:
-            check_hash(request_model.password,db_employee.password)
+            check_hash(request_model.password,db_user.password)
 
         except ChekPasswordHashException:
             raise SanicPasswordHashException('Wrong password')
 
         payload = {
-            'edi':db_employee.id,
+            'edi':db_user.id,
         }
         response_body = {
             'authorization':create_token(payload)

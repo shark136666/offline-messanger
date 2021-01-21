@@ -135,3 +135,4 @@ samples/
 db.sqlite
 data/
 jwt/
+sanic/db/migration/versions
