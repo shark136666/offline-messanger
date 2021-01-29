@@ -18,7 +18,7 @@ class DBSession:
     def close_session(self):
         self.close_session()
 
-    def add_model(self, model:BaseModel):
+    def add_model(self, model: BaseModel):
         try:
             self._session.add(model)
         except IntegrityError as e:

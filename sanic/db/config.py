@@ -1,5 +1,7 @@
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv()
 
 
 class SQLiteConfig:
@@ -9,7 +11,11 @@ class SQLiteConfig:
 
 class PostgresConfig:
     # 'postgresql://scott:tiger@localhost:5432/mydatabase'
-    name = os.getenv('dbname', 'postgres:mysecretpassword@localhost:5432/postgres')
-    url = rf'postgresql://{name}'
+    password = os.getenv('POSTGRES_PASSWORD')
+    user = os.getenv('POSTGRES_USER')
+    name = os.getenv('POSTGRES_DB')
+    host = os.getenv('POSTGRES_HOST')
+    # name = os.getenv('dbname', 'postgres:mysecretpassword@localhost:5432/postgres')
+    url = rf'postgresql://{user}:{password}@{host}/{name}'
 
 

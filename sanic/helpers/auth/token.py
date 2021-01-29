@@ -13,7 +13,7 @@ def create_token(payload: dict) -> str:
     return jwt.encode(payload, secret, algorithm='HS256')
 
 
-def read_token(token: str) -> dict :
+def read_token(token: str) -> dict:
     try:
         return jwt.decode(token, secret, algorithms='HS256')
     except jwt.exceptions.PyJWTError:
