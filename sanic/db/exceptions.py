@@ -14,6 +14,11 @@ class DBUserNotExistExtension(Exception):
     pass
 
 
+class DBMessageException(Exception):
+    pass
+
+
+
 
 
 

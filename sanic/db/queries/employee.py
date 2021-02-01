@@ -1,14 +1,14 @@
-from api.request import RequestCreateUserDto
+from api.request import RequestCreatemeaasgeDto
 from db.database import DBSession
 from db.exceptions import DBEmployeeExistException, DBUserNotExistExtension
 from db.models import DBEmployee
 
 
-def create_employee(session: DBSession, employee: RequestCreateUserDto, hashed_password: bytes) -> DBEmployee:
+def create_employee(session: DBSession, employee: RequestCreatemeaasgeDto, hashed_password: bytes) -> DBEmployee:
     new_employee = DBEmployee(
         login=employee.login,
         password=hashed_password,
-        first_name=employee.first_name,
+        message=employee.message,
         last_name=employee.last_name,
         department=employee.department,
         position=employee.position,

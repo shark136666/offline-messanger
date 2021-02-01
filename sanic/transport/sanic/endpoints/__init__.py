@@ -5,3 +5,5 @@ from .employees.auth import AuthEmployeeEndpoint
 from .users.create import CreateUserEndpoint
 from .users.auth import AuthUserEndpoint
 from .users.user import UserEndpoint
+from .messages.create import CreateMessageEndpoint
+from .messages.message import MessageEndpoint

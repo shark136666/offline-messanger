@@ -1,10 +1,10 @@
-from api.request import RequestCreateUserDto, RequestPatchUserDto
+from api.request import RequestCreatemeaasgeDto, RequestPatchUserDto
 from db.database import DBSession
 from db.exceptions import DBEmployeeExistException, DBUserNotExistExtension
 from db.models import DBUser
 
 
-def create_user(session: DBSession, user: RequestCreateUserDto, hashed_password: bytes) -> DBUser:
+def create_user(session: DBSession, user: RequestCreatemeaasgeDto, hashed_password: bytes) -> DBUser:
     new_user = DBUser(
         login=user.login,
         password=hashed_password,

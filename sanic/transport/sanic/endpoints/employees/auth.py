@@ -3,7 +3,7 @@ from sanic.response import BaseHTTPResponse
 from transport.sanic.exceptions import SanicUserNotFound,SanicPasswordHashException
 
 from transport.sanic.endpoints import BaseEndpoint
-from api.request import RequestCreateUserDto
+from api.request import RequestCreatemeaasgeDto
 from db.queries import employee as employees_queries
 from db.exceptions import DBUserNotExistExtension
 from helpers.password.hash import check_hash,ChekPasswordHashException
@@ -12,7 +12,7 @@ from helpers.auth import create_token
 class AuthEmployeeEndpoint(BaseEndpoint):
     async def method_post(self, request: Request, body: dict,session, *args, **kwargs) -> BaseHTTPResponse:
 
-        request_model = RequestCreateUserDto(body)
+        request_model = RequestCreatemeaasgeDto(body)
 
         try:
             db_employee = employees_queries.get_employee(session,login=request_model.login)

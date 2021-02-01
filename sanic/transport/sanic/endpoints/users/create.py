@@ -1,7 +1,7 @@
 from sanic.request import Request
 from sanic.response import BaseHTTPResponse
 
-from api.request import RequestCreateUserDto
+from api.request import RequestCreatemeaasgeDto
 from transport.sanic.endpoints import BaseEndpoint
 from api.response import ResponseUserDto
 from transport.sanic.exceptions import SanicPasswordHashException,SanicDBException,SanicEmployeeConflictException
@@ -16,7 +16,7 @@ from helpers.password import GeneratePasswordHashException
 class CreateUserEndpoint(BaseEndpoint):
     async def method_post(self, request: Request, body: dict,session, *args, **kwargs) -> BaseHTTPResponse:
 
-        request_model = RequestCreateUserDto(body)
+        request_model = RequestCreatemeaasgeDto(body)
 
         try:
             hashed_password = generate_hash(request_model.password)
