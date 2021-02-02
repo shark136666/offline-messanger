@@ -19,6 +19,7 @@ class SanicEndpoint:
             except SanicAuthException as e:
                 return await self.make_response_json(status=e.status_code)
             else:
+
                 kwargs.update(token)
         return await self.handler(request, *args, **kwargs)
 
@@ -69,6 +70,7 @@ class SanicEndpoint:
         token = request.headers.get('Authorization')
         try:
             return read_token(token)
+
         except ReadTokenException as e:
             raise SanicAuthException(str(e))
 
@@ -82,6 +84,7 @@ class SanicEndpoint:
         #         return await self.make_response_json(status=e.status_code)
 
         body.update(self.import_body_json(request))
+
         body.update(self.import_body_headers(request))
         return await self._method(request, body, *args, **kwargs)
 

@@ -52,7 +52,7 @@ class DBSession:
     def get_user_id_by_login(self, login:str):
         return self._session.query(DBUser).filter(DBUser.login == login).first().id
 
-    def get_sender_id(self, message_id):
+    def get_message(self, message_id):
         return self._session.query(DBMessage).filter(DBMessage.id == message_id).first()
 
 
