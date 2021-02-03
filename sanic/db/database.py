@@ -9,7 +9,7 @@ from db.models import BaseModel, DBEmployee, DBUser, DBMessage
 class DBSession:
     _session: Session
 
-    def __init__(self,session: Session):
+    def __init__(self, session: Session):
         self._session = session
 
     def query(self, *args, **kwargs):
@@ -26,13 +26,13 @@ class DBSession:
         except DataError as e:
             raise DBDataException(e)
 
-    def get_employee_login(self, login:str) -> DBEmployee:
+    def get_employee_login(self, login: str) -> DBEmployee:
         return self._session.query(DBEmployee).filter(DBEmployee.login == login).first()
 
-    def get_user_login(self, login:str) -> DBUser:
+    def get_user_login(self, login: str) -> DBUser:
         return self._session.query(DBUser).filter(DBUser.login == login).first()
 
-    def commit_session(self,need_close:bool= False):
+    def commit_session(self, need_close: bool = False):
         try:
             self._session.commit()
         except IntegrityError as e:
@@ -43,17 +43,17 @@ class DBSession:
         if need_close:
             self.close_session()
 
-    def get_employee_by_id(self, employee_id:int):
+    def get_employee_by_id(self, employee_id: int):
         return self._session.query(DBEmployee).filter(DBEmployee.id == employee_id).first()
 
-    def get_user_by_id(self, user_id:int):
-        return self._session.query(DBUser).filter(DBUser.id == user_id).first()
+    def get_user_by_id(self, user_id: int):
+        return self._session.query(DBUser).filter(DBUser.id == user_id, DBUser.is_delete == False).first()
 
-    def get_user_id_by_login(self, login:str):
-        return self._session.query(DBUser).filter(DBUser.login == login).first().id
+    def get_user_id_by_login(self, login: str):
+        return self._session.query(DBUser).filter(DBUser.login == login, DBUser.is_delete==False).first().id
 
     def get_message(self, message_id):
-        return self._session.query(DBMessage).filter(DBMessage.id == message_id).first()
+        return self._session.query(DBMessage).filter(DBMessage.id == message_id, DBMessage.is_delete == False).first()
 
 
 class DataBase:
@@ -71,12 +71,3 @@ class DataBase:
     def make_session(self) -> DBSession:
         session = self.session_factory()
         return DBSession(session)
-
-
-
-
-
-
-
-
-

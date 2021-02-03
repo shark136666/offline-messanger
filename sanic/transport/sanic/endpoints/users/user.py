@@ -50,14 +50,12 @@ class UserEndpoint(BaseEndpoint):
         return await self.make_response_json(status=204)
 
     async def method_get(
-            self, request: Request, body: dict, session: DBSession, uid: int, token: dict, *args, **kwargs
+            self, request: Request, body: dict, session: DBSession,token , uid: int,  *args, **kwargs
     ) -> BaseHTTPResponse:
         if token.get('uid') is not uid:
             return await self.make_response_json(status=403)
-        request_model = RequestPatchUserDto(body)
-
         try:
-            user = user_queries.patch_user(session, request_model, uid)
+            user = user_queries.get_user(session, user_id=uid)
         except DBUserNotExistExtension:
             raise SanicUserNotFound('User not found')
 
@@ -65,6 +63,7 @@ class UserEndpoint(BaseEndpoint):
         body = response_model.dump()
         body.pop('id')
         return await self.make_response_json(status=200, body=response_model.dump())
+
     async def method_post(self, request: Request, body: dict,session, *args, **kwargs) -> BaseHTTPResponse:
 
         request_model = RequestCreatemeaasgeDto(body)

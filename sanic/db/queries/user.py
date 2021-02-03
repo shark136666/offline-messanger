@@ -17,7 +17,7 @@ def create_user(session: DBSession, user: RequestCreatemeaasgeDto, hashed_passwo
     return new_user
 
 
-def get_user(session: DBSession, *, login: str = str, user_id: int = None) -> DBUser:
+def get_user(session: DBSession, *, login: str = None, user_id: int = None) -> DBUser:
     db_user = None
 
     if login is not None:
@@ -26,13 +26,14 @@ def get_user(session: DBSession, *, login: str = str, user_id: int = None) -> DB
         db_user = session.get_user_by_id(user_id)
 
     if db_user is None:
-        raise DBEmployeeExistException
+        raise DBUserNotExistExtension
 
     return db_user
 
 
 def patch_user(session: DBSession, user: RequestPatchUserDto, user_id: int) -> DBUser:
     db_user = session.get_user_by_id(user_id)
+
     #attrs = ('first_name', 'last_name')
 
     for attr in user.fields:
