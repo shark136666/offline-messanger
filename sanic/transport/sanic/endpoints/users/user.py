@@ -1,7 +1,7 @@
 from sanic.request import Request
 from sanic.response import BaseHTTPResponse
 
-from api.request import RequestPatchUserDto, RequestCreateMessageDto
+from api.request import RequestPatchUserDto, RequestCreateUserDto
 from db.database import DBSession
 from transport.sanic.endpoints import BaseEndpoint
 from api.response import ResponseUserDto
@@ -66,7 +66,7 @@ class UserEndpoint(BaseEndpoint):
 
     async def method_post(self, request: Request, body: dict,session, *args, **kwargs) -> BaseHTTPResponse:
 
-        request_model = RequestCreateMessageDto(body)
+        request_model = RequestCreateUserDto(body)
 
         try:
             hashed_password = generate_hash(request_model.password)
