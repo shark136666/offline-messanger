@@ -12,15 +12,7 @@ port=8000
 workers=1
 debug=True
 ```
-- create .env file in /np-final-project/sanic, with
-```sh
-host=0.0.0.0
-port=8000
-workers=1
-debug=True
-dbname="user":"password"@pg_db:5432/"db name"
-```
-- start docker-compose
+- start docker-compose from /np-final-project
 ```sh
 docker-compose up
 ```
