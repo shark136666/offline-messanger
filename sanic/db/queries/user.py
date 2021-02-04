@@ -1,10 +1,10 @@
-from api.request import RequestCreatemeaasgeDto, RequestPatchUserDto
+from api.request import RequestCreateMessageDto, RequestPatchUserDto
 from db.database import DBSession
-from db.exceptions import DBEmployeeExistException, DBUserNotExistExtension
+from db.exceptions import DBEUserExistException, DBUserNotExistExtension
 from db.models import DBUser
 
 
-def create_user(session: DBSession, user: RequestCreatemeaasgeDto, hashed_password: bytes) -> DBUser:
+def create_user(session: DBSession, user: RequestCreateMessageDto, hashed_password: bytes) -> DBUser:
     new_user = DBUser(
         login=user.login,
         password=hashed_password,
@@ -12,7 +12,7 @@ def create_user(session: DBSession, user: RequestCreatemeaasgeDto, hashed_passwo
         last_name=user.last_name,
     )
     if session.get_user_login(new_user.login) is not None:
-        raise DBEmployeeExistException
+        raise DBEUserExistException
     session.add_model(new_user)
     return new_user
 
@@ -34,15 +34,13 @@ def get_user(session: DBSession, *, login: str = None, user_id: int = None) -> D
 def patch_user(session: DBSession, user: RequestPatchUserDto, user_id: int) -> DBUser:
     db_user = session.get_user_by_id(user_id)
 
-    #attrs = ('first_name', 'last_name')
-
     for attr in user.fields:
         if hasattr(user, attr):
             setattr(db_user, attr, getattr(user, attr))
     return db_user
 
 
-def delete_user(session:DBSession, user_id: int) -> DBUser:
+def delete_user(session: DBSession, user_id: int) -> DBUser:
     db_user = session.get_user_by_id(user_id)
     db_user.is_delete = True
     return db_user

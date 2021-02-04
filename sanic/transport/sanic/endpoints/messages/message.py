@@ -4,7 +4,7 @@ from sanic.response import BaseHTTPResponse
 from api.request import RequestCreateMessageDto, RequestPatchMessageDto
 from api.response import ResponseMessageDto
 from db.database import DBSession
-from db.exceptions import DBDataException, DBintegrityException, DBUserNotExistExtension
+from db.exceptions import DBDataException, DBIntegrityException, DBUserNotExistExtension
 from db.queries import message as message_queries
 from transport.sanic.endpoints import BaseEndpoint
 from transport.sanic.exceptions import SanicDBException, SanicUserNotFound, SanicAccessDeniedException
@@ -31,7 +31,7 @@ class MessageEndpoint(BaseEndpoint):
         db_message = message_queries.patch_message(session, request_model, message_id, sender_id)
         try:
             session.commit_session()
-        except (DBDataException, DBintegrityException) as e:
+        except (DBDataException, DBIntegrityException) as e:
             raise SanicDBException(str(e))
         response_model = ResponseMessageDto(db_message)
 
@@ -56,7 +56,7 @@ class MessageEndpoint(BaseEndpoint):
 
         try:
             session.commit_session()
-        except (DBDataException, DBintegrityException) as e:
+        except (DBDataException, DBIntegrityException) as e:
             raise SanicDBException(str(e))
         return await self.make_response_json(status=204)
 
@@ -71,7 +71,7 @@ class MessageEndpoint(BaseEndpoint):
             raise SanicUserNotFound('recipient not found')
         try:
             session.commit_session()
-        except (DBDataException, DBintegrityException) as e:
+        except (DBDataException, DBIntegrityException) as e:
             raise SanicDBException(str(e))
 
         response_model = ResponseMessageDto(db_message)

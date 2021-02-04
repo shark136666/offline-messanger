@@ -12,13 +12,15 @@ from transport.sanic.exceptions import SanicAccessDeniedException
 
 class BaseEndpoint(SanicEndpoint):
     async def _method(self, request: Request, body: dict,  *args, **kwargs) -> BaseHTTPResponse:
-        token = kwargs['token']
         database = self.context.database
         session = database.make_session()
-        try:
-            self.authorization(session, token)
-        except SanicAccessDeniedException:
-            return await self.make_response_json(status=403)
+        if kwargs.get('token') is not None:
+            token = kwargs['token']
+            try:
+                self.authorization(session, token)
+            except SanicAccessDeniedException:
+                return await self.make_response_json(status=403)
+
         try:
             return await super()._method(request, body, session, *args, **kwargs)
 

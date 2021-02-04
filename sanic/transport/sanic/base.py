@@ -37,7 +37,6 @@ class SanicEndpoint:
         self.auth_required=auth_required
         self.__name__ = self.__class__.__name__
 
-
     @staticmethod
     async def make_response_json(
             body: dict = None, status: int = 200, message: str = None, error_code: int = None
@@ -76,12 +75,6 @@ class SanicEndpoint:
 
     async def handler(self, request: Request, *args, **kwargs) -> BaseHTTPResponse :
         body = {}
-
-        # if self.auth_required:
-        #     try:
-        #         body.update(self.import_body_auth(request))
-        #     except SanicAuthException as e:
-        #         return await self.make_response_json(status=e.status_code)
 
         body.update(self.import_body_json(request))
 

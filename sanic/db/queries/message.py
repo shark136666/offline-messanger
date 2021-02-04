@@ -1,8 +1,10 @@
+from typing import List
+
 from api.request import RequestCreateMessageDto, RequestPatchMessageDto
 from db.database import DBSession
-from db.exceptions import DBEmployeeExistException, DBUserNotExistExtension
+from db.exceptions import DBUserNotExistExtension
 from db.models import DBMessage
-from transport.sanic.exceptions import SanicUserNotFound, SanicAccessDeniedException
+from transport.sanic.exceptions import SanicAccessDeniedException
 
 
 def create_message(session: DBSession, message: RequestCreateMessageDto, sender_id: int) -> DBMessage:
@@ -35,7 +37,7 @@ def check_message_author(session: DBSession, message_id: int, sender_id: int) ->
         return True
 
 
-def delete_message(session: DBSession, message_id: int) ->DBMessage:
+def delete_message(session: DBSession, message_id: int) -> DBMessage:
     db_message = session.get_message(message_id)
     db_message.is_delete = True
     return db_message
@@ -44,3 +46,8 @@ def delete_message(session: DBSession, message_id: int) ->DBMessage:
 def get_message(session: DBSession, message_id: int) -> DBMessage:
     db_message = session.get_message(message_id)
     return db_message
+
+
+def get_all_messages(session: DBSession, sender_id: int) -> List[DBMessage]:
+    return session.get_all_messages(sender_id)
+

@@ -1,6 +1,6 @@
 import datetime
 
-from marshmallow import Schema, fields,pre_load, post_load
+from marshmallow import Schema, fields, pre_load, post_load
 
 from api.base import ResponseDto
 
@@ -33,5 +33,5 @@ class ResponseUserDtoSchema(Schema):
         return data
 
 
-class ResponseUserDto(ResponseDto,ResponseUserDtoSchema):
+class ResponseUserDto(ResponseDto, ResponseUserDtoSchema):
     __schema__ = ResponseUserDtoSchema

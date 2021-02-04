@@ -1,4 +1,4 @@
-class DBintegrityException(Exception):
+class DBIntegrityException(Exception):
     pass
 
 
@@ -6,7 +6,7 @@ class DBDataException(Exception):
     pass
 
 
-class DBEmployeeExistException(Exception):
+class DBEUserExistException(Exception):
     pass
 
 

@@ -5,13 +5,13 @@ from transport.sanic.exceptions import SanicUserNotFound, SanicPasswordHashExcep
 from transport.sanic.endpoints import BaseEndpoint
 from db.queries import user as user_queries
 from db.exceptions import DBUserNotExistExtension
-from helpers.password.hash import check_hash,ChekPasswordHashException
+from helpers.password.hash import check_hash, ChekPasswordHashException
 from helpers.auth import create_token
 from api.request import RequestAuthUserDto
 
 
 class AuthUserEndpoint(BaseEndpoint):
-    async def method_post(self, request: Request, body: dict,session, *args, **kwargs) -> BaseHTTPResponse:
+    async def method_post(self, request: Request, body: dict, session, *args, **kwargs) -> BaseHTTPResponse:
 
         request_model = RequestAuthUserDto(body)
 
@@ -37,5 +37,3 @@ class AuthUserEndpoint(BaseEndpoint):
             status=200,
 
         )
-
-

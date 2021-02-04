@@ -1,8 +1,7 @@
-from configs.config import ApplicationConfig
 from sqlalchemy import create_engine
 
+from configs.config import ApplicationConfig
 from context import Context
-from db.config import SQLiteConfig
 from db.database import DataBase
 
 

@@ -1,9 +1,12 @@
+from typing import List
+
+from sqlalchemy import and_
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError, DataError
 from sqlalchemy.orm import sessionmaker, Session
 
-from db.exceptions import DBintegrityException, DBDataException
-from db.models import BaseModel, DBEmployee, DBUser, DBMessage
+from db.exceptions import DBIntegrityException, DBDataException
+from db.models import BaseModel, DBUser, DBMessage
 
 
 class DBSession:
@@ -22,12 +25,9 @@ class DBSession:
         try:
             self._session.add(model)
         except IntegrityError as e:
-            raise DBintegrityException(e)
+            raise DBIntegrityException(e)
         except DataError as e:
             raise DBDataException(e)
-
-    def get_employee_login(self, login: str) -> DBEmployee:
-        return self._session.query(DBEmployee).filter(DBEmployee.login == login).first()
 
     def get_user_login(self, login: str) -> DBUser:
         return self._session.query(DBUser).filter(DBUser.login == login).first()
@@ -36,24 +36,28 @@ class DBSession:
         try:
             self._session.commit()
         except IntegrityError as e:
-            raise DBintegrityException(e)
+            raise DBIntegrityException(e)
         except DataError as e:
             raise DBDataException(e)
 
         if need_close:
             self.close_session()
 
-    def get_employee_by_id(self, employee_id: int):
-        return self._session.query(DBEmployee).filter(DBEmployee.id == employee_id).first()
-
     def get_user_by_id(self, user_id: int):
-        return self._session.query(DBUser).filter(DBUser.id == user_id, DBUser.is_delete == False).first()
+        return self._session.query(DBUser).filter(and_(
+            DBUser.id == user_id, DBUser.is_delete == False)).first()
 
     def get_user_id_by_login(self, login: str):
-        return self._session.query(DBUser).filter(DBUser.login == login, DBUser.is_delete==False).first().id
+        return self._session.query(DBUser).filter(
+            and_(DBUser.login == login, DBUser.is_delete == False)).first().id
 
     def get_message(self, message_id):
-        return self._session.query(DBMessage).filter(DBMessage.id == message_id, DBMessage.is_delete == False).first()
+        return self._session.query(DBMessage).filter(
+            and_(DBMessage.id == message_id, DBMessage.is_delete == False)).first()
+
+    def get_all_messages(self, sender_id) -> List[DBMessage]:
+        return self._session.query(DBMessage).filter(
+            and_(DBMessage.sender_id == sender_id, DBMessage.is_delete == False)).all()
 
 
 class DataBase:
