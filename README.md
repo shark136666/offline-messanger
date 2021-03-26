@@ -1,5 +1,5 @@
 # Quick start
-- create .env file in /np-final-project, with
+- create .env file in /offline-messanger, with
 ```sh
 ####### Postgres
 POSTGRES_PASSWORD=secret
@@ -12,7 +12,7 @@ port=8000
 workers=1
 debug=True
 ```
-- start docker-compose from /np-final-project
+- start docker-compose from /offline-messanger
 ```sh
 docker-compose up
 ```
